@@ -1,0 +1,5 @@
+[2023-09-22 23:32:22] local.ERROR: Error de prueba at C:\xampp\htdocs\supermercado\app\utiles\cache.php:42
+Stack trace:
+#0 C:\xampp\htdocs\supermercado\app\controladores\PruebaControlador.php(10): App\Utiles\Cache::obtener('clientes')
+#1 {main}
+

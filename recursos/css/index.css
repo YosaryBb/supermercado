@@ -1,0 +1,23 @@
+body {
+    background-color: #4CAF50;
+    /* Color de fondo verde */
+}
+
+.login-container {
+    background-color: #FFD700;
+    /* Color de fondo amarillo */
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 100px;
+    
+}
+
+.login-container img {
+    display: block;
+    margin: 0 auto 20px;
+    box-shadow: 0 0 10px rgba(126, 23, 23, 0.2);
+    border-radius: 50%
+}
+
