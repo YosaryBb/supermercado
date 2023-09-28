@@ -3,12 +3,16 @@
 namespace App\Utiles;
 
 require __DIR__ . '/../../autoload.php';
-require __DIR__ . '/global.php';
 
 use App\Utiles\Sesion;
 
 class Peticion
 {
+    private $url;
+    private $parametros = [];
+    private $reemplazar = true;
+    private $salir = true;
+    private $crearTemporal = false;
     private $datos = [];
     private $archivos = [];
 
@@ -79,13 +83,35 @@ class Peticion
 
     public function redireccionar($url, $parametros = [], $reemplazar = true, $salir = true)
     {
-        if (!empty($parametros)) {
-            $url = $url . '?' . http_build_query($parametros);
+        $this->url = $url;
+        $this->parametros = $parametros;
+        $this->reemplazar = $reemplazar;
+        $this->salir = $salir;
+
+        return $this;
+    }
+
+    public function crearTemporal($llave, $valor)
+    {
+        $this->crearTemporal = true;
+
+        $sesion = new Sesion();
+        $sesion->crearTemporal($llave, $valor);
+
+        return $this;
+    }
+
+    public function redirigir()
+    {
+        if (!empty($this->parametros)) {
+            $url = $this->url . '?' . http_build_query($this->parametros);
+        } else {
+            $url = $this->url;
         }
 
-        header('Location: ' . $url, $reemplazar);
+        header('Location: ' . $url, $this->reemplazar);
 
-        if ($salir) {
+        if ($this->salir) {
             exit;
         }
     }

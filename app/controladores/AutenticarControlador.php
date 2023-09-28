@@ -1,6 +1,7 @@
 <?php
 
-require __DIR__ ."/../../autoload.php";
+require __DIR__ . "/../../autoload.php";
+require __DIR__ . "/../utiles/Global.php";
 
 use App\Modelos\Autenticacion;
 use App\Utiles\Log;
@@ -10,21 +11,21 @@ try {
     $peticion = new Peticion();
 
     if (!$peticion->esPost()) {
-        $peticion->redireccionar('../../', ['status' => '01-405']);
+        $peticion->redireccionar('../../')->crearTemporal('status', 'El método no es valido.')->redirigir();
     }
 
     $data = $peticion->todo();
 
     if (empty($data)) {
-        $peticion->redireccionar('../../', ['status' => '01-0101']);
+        $peticion->redireccionar('../../')->crearTemporal('status', 'Los datos no pueden estar vacíos.')->redirigir();
     }
 
     if (isset($data['usuario']) && !strlen($data['usuario']) > 0) {
-        $peticion->redireccionar('../../', ['status' => '01-0102']);
+        $peticion->redireccionar('../../')->crearTemporal('status', 'El usuario no puede estar vació.')->redirigir();
     }
 
     if (isset($data['clave']) && !strlen($data['clave']) > 0) {
-        $peticion->redireccionar('../../', ['status' => '01-0103']);
+        $peticion->redireccionar('../../')->crearTemporal('status', 'La contraseña no puede estar vacía.')->redirigir();
     }
 
     $autenticar = new Autenticacion();
@@ -32,13 +33,12 @@ try {
     $respuesta = $autenticar->autenticar($peticion->escaparArreglo($data));
 
     if (!$respuesta) {
-        $peticion->redireccionar('../../', ['status' => '01-0111']);
+        $peticion->redireccionar('../../')->crearTemporal('status', 'El usuario o la contraseña son incorrectos.')->redirigir();
     }
 
     $peticion->redireccionar('../../dashboard/home.html');
 } catch (\Exception $th) {
     Log::set($th);
 
-    header('Location: ../../?status=500');
-    exit;
+    $peticion->redireccionar('../../')->crearTemporal('status', $th->getMessage())->redirigir();
 }
