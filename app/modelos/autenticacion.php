@@ -4,16 +4,16 @@ namespace App\Modelos;
 
 class Autenticacion extends Modelo
 {
-    protected $tabla = 'usuario';
+    protected $tabla = 'usuarios';
 
     public function autenticar(array $datos = []): bool
     {
-        $usuario = htmlspecialchars(mysqli_real_escape_string($this->conexion, $datos['usuario']));
-        $clave = htmlspecialchars(mysqli_real_escape_string($this->conexion, $datos['clave']));
+        $usuario =  $datos['usuario'];
+        $clave = $datos['clave'];
 
-        $clave = md5($clave, true);
+        $clave = md5($clave);
 
-        $sql = "SELECT * FROM $this->tabla WHERE usuario = $usuario AND clave = $clave AND status = 1";
+        $sql = "SELECT idUsuario FROM $this->tabla WHERE usuario = '$usuario' AND clave = '$clave'";
 
         $resultado = mysqli_query($this->conexion, $sql);
 

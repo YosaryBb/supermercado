@@ -4,33 +4,38 @@ require __DIR__ ."/../../autoload.php";
 
 use App\Modelos\Autenticacion;
 use App\Utiles\Log;
+use App\Utiles\Peticion;
 
 try {
-    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-        header('Location: ../../?status=1500');
-        exit;
+    $peticion = new Peticion();
+
+    if (!$peticion->esPost()) {
+        $peticion->redireccionar('../../', ['status' => '01-405']);
     }
 
-    $data = json_decode(file_get_contents('php://input'), true);
+    $data = $peticion->todo();
 
     if (empty($data)) {
-        header('Location:../../?status=1230');
-        exit;
+        $peticion->redireccionar('../../', ['status' => '01-0101']);
     }
 
-    if (!isset($data['usuario'])) {
-        header('Location:../../?status=1231');
-        exit;
+    if (isset($data['usuario']) && !strlen($data['usuario']) > 0) {
+        $peticion->redireccionar('../../', ['status' => '01-0102']);
     }
 
-    if (!isset($data['clave'])) {
-        header('Location:../../?status=1232');
-        exit;
+    if (isset($data['clave']) && !strlen($data['clave']) > 0) {
+        $peticion->redireccionar('../../', ['status' => '01-0103']);
     }
 
     $autenticar = new Autenticacion();
 
-    $respuesta = $autenticar->autenticar($data);
+    $respuesta = $autenticar->autenticar($peticion->escaparArreglo($data));
+
+    if (!$respuesta) {
+        $peticion->redireccionar('../../', ['status' => '01-0111']);
+    }
+
+    $peticion->redireccionar('../../dashboard/home.html');
 } catch (\Exception $th) {
     Log::set($th);
 
