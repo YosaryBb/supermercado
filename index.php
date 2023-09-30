@@ -12,6 +12,11 @@
 </head>
 <body>
     <div class="container">
+        <?php if (sesion()->has('status')): ?>
+            <div class="alert alert-danger">
+                <?= sesion()->temporal('status')?>
+            </div>
+        <?php endif;?>
         <div class="row">
             <div class="co l-md-6 offset-md-3 login-container">
                 <img src="<?= assets('disco/super.jpg') ?>" alt="SUPERMERCADO" width="150">

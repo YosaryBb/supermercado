@@ -20,4 +20,9 @@ body {
     box-shadow: 0 0 10px rgba(126, 23, 23, 0.2);
     border-radius: 50%
 }
+.alert-danger{
+    background-color: #98FB98; /* Color verde pastel */
+    border-color: #7CCD7C; /* Color del borde (opcional) */
+    color: #333; /* Color del texto (opcional) */
+}
 
